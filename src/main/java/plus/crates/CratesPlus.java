@@ -31,7 +31,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CratesPlus extends JavaPlugin implements Listener {
-    private String pluginPrefix = "";
+    private static CratesPlus plugin;
+	private String pluginPrefix = "";
     private String updateMessage = "";
     private String configBackup = null;
     private boolean updateAvailable = false;
@@ -46,6 +47,7 @@ public class CratesPlus extends JavaPlugin implements Listener {
     private ArrayList<UUID> creatingCrate = new ArrayList<>();
 
     public void onEnable() {
+    	plugin = this;
         Server server = getServer();
         Pattern pattern = Pattern.compile("(^[^\\-]*)");
         Matcher matcher = pattern.matcher(server.getBukkitVersion());
@@ -59,7 +61,7 @@ public class CratesPlus extends JavaPlugin implements Listener {
         if (getConfig().isSet("Bukkit Version"))
             bukkitVersion = getConfig().getString("Bukkit Version");
 
-        if (LinfootUtil.versionCompare(bukkitVersion, "1.14.2") > 0) {
+        if (LinfootUtil.versionCompare(bukkitVersion, "1.14.4") > 0) {
             // This means the plugin is using something newer than the latest tested build... we'll show a warning but carry on as usual
             getLogger().warning("CratesPlus has not yet been officially tested with Bukkit " + bukkitVersion + " but should still work");
         }
@@ -438,5 +440,9 @@ public class CratesPlus extends JavaPlugin implements Listener {
     public void removeCreating(UUID uuid) {
         creatingCrate.remove(uuid);
     }
+    public static CratesPlus getInstance() {
+		return plugin;
+	}
+
 
 }

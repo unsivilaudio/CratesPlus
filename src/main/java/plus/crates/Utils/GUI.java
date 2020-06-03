@@ -1,5 +1,11 @@
 package plus.crates.Utils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.NavigableMap;
+import java.util.TreeMap;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,8 +13,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import plus.crates.CratesPlus;
 
 /**
  * Connor Linfoot's GUI Library
@@ -99,6 +106,7 @@ public class GUI {
             open(player, getPlayerPage(player) + 1);
         } else {
             Integer item = calculateItemFromSlot(player, slot);
+            Bukkit.getLogger().warning("Player clicked " + item);
             if (clickHandlers.containsKey(item) && clickHandlers.get(item) != null) {
                 ClickHandler clickHandler = clickHandlers.get(item);
                 clickHandler.doClick(player, this);
@@ -149,13 +157,15 @@ public class GUI {
         int pages = 1;
         if (!getItems().isEmpty())
             pages = (int) Math.ceil(getItems().lastKey() / itemsPerPage) + 1;
+
         int startFrom = ((page - 1) * itemsPerPage);
 
         int size = 45;
         if (getGoBackHandler() != null || page > 1 || pages > page)
             size = size + 9;
-
+        
         String title = getTitle();
+
         if (isShowPages()) {
             title += " (Page " + page + "/" + pages + ")";
         }
@@ -189,7 +199,6 @@ public class GUI {
             prev.setItemMeta(prevMeta);
             inventory.setItem(50, prev);
         }
-
         return inventory;
     }
 
@@ -200,7 +209,12 @@ public class GUI {
     public void open(Player player, Integer page) {
         guis.put(player.getUniqueId(), this);
         pageTracker.put(player.getUniqueId(), page);
-        player.openInventory(create(page));
+        new BukkitRunnable() {
+			@Override
+			public void run() {
+		        player.openInventory(create(page));
+			}
+		}.runTaskLater(CratesPlus.getInstance(), 1L);
     }
 
     public abstract static class ClickHandler {

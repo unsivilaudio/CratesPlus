@@ -17,7 +17,7 @@ public class GUIListeners implements Listener {
         if (GUI.guis.containsKey(event.getWhoClicked().getUniqueId())) {
             event.setCancelled(true);
             if (event.getCurrentItem() == null || event.getRawSlot() != event.getSlot() || event.getCurrentItem().getType().equals(Material.AIR))
-                return;
+            	return;
             GUI gui = GUI.guis.get(event.getWhoClicked().getUniqueId());
             gui.handleClick((Player) event.getWhoClicked(), event.getSlot());
         }

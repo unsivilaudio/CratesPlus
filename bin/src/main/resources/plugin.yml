@@ -3,8 +3,7 @@ description: ${project.description}
 main: plus.crates.CratesPlus
 version: ${project.version}
 author: Connor Linfoot
-softdepend: [HolographicDisplays,IndividualHolograms,Multiverse-Core]
-api-version: 1.14
+softdepend: [HolographicDisplays,IndividualHolograms]
 commands:
   crate:
     description: Main CratesPlus command
